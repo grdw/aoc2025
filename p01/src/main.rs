@@ -22,7 +22,7 @@ fn main() -> Result<(), io::Error> {
     Ok(())
 }
 
-fn part1(directions: &Rotations) -> u8 {
+fn part1(directions: &Rotations) -> u16 {
     let mut counter = 0;
     let mut start = 50;
 
@@ -43,7 +43,7 @@ fn part1(directions: &Rotations) -> u8 {
     return counter
 }
 
-fn part2(directions: &Rotations) -> u8 {
+fn part2(directions: &Rotations) -> u16 {
     let mut counter = 0;
     let mut start = 50;
 
