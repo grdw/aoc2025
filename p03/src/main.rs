@@ -65,7 +65,7 @@ fn part2(battery_banks: &BatteryBanks) -> u64 {
         let mut picks = 0;
 
         loop {
-            let midx = cmp::min(idx+powered_batteries, bank.len()-idx);
+            let midx = cmp::min(idx+(bank.len()+1-powered_batteries), bank.len());
             let mut max = 0;
             for j in idx..midx {
                 if bank[j] > max {
@@ -78,6 +78,7 @@ fn part2(battery_banks: &BatteryBanks) -> u64 {
             idx += 1;
             picks += 1;
 
+            println!("{:?} {} {}", joltage, picks, midx);
             if picks == powered_batteries {
                 break;
             }
