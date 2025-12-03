@@ -12,7 +12,7 @@ fn main() -> Result<(), io::Error> {
         .collect::<BatteryBanks>();
 
     println!("p1: {}", part1(&battery_banks));
-    //println!("p2: {}", part2(&battery_banks));
+    println!("p2: {}", part2(&battery_banks));
 
     Ok(())
 }
@@ -49,43 +49,51 @@ fn part1(battery_banks: &BatteryBanks) -> u16 {
     return total
 }
 
-//fn part2(battery_banks: &BatteryBanks) -> u16 {
-//    let mut counter = 0;
-//    let mut start = 50;
-//
-//    for (dir, rotations) in battery_banks {
-//        for _ in 0..*rotations {
-//            match dir {
-//                'L' => start -= 1,
-//                'R' => start += 1,
-//                _   => panic!("invalid orientation")
-//            };
-//
-//            start %= 100;
-//
-//            if start == 0 {
-//                counter += 1;
-//            }
-//        }
-//    }
-//
-//    return counter
-//}
-//
-//#[test]
-//fn test_parts() {
-//    let test_rotations = vec![
-//        ('L', 68),
-//        ('L', 30),
-//        ('R', 48),
-//        ('L', 5),
-//        ('R', 60),
-//        ('L', 55),
-//        ('L', 1),
-//        ('L', 99),
-//        ('R', 14),
-//        ('L', 82),
-//    ];
-//    assert_eq!(part1(&test_rotations), 3);
-//    assert_eq!(part2(&test_rotations), 6);
-//}
+fn part2(battery_banks: &BatteryBanks) -> u64 {
+    let mut counter = 0;
+    let max_switches = 12;
+
+    for bank in battery_banks {
+        let mut switches = vec![];
+        let mut count = 0;
+        let l = bank.len();
+
+        'parent: for i in ('1'..='9').rev() {
+            for j in (0..l).rev() {
+                if bank.chars().nth(j) == Some(i) {
+                    switches.push(j);
+                    count += 1;
+
+                    if count == max_switches {
+                        break 'parent;
+                    }
+                }
+            }
+        }
+
+        let mut total = String::new();
+        switches.sort();
+
+        for i in 0..switches.len() {
+            total.push(bank.chars().nth(switches[i]).unwrap());
+        }
+        println!("{:?}", total);
+        counter += total.parse::<u64>().unwrap();
+    }
+    return counter
+}
+
+#[test]
+fn test_part2() {
+    assert_eq!(
+        part2(
+            &vec![
+                String::from("987654321111111"),
+                String::from("811111111111119"),
+                String::from("234234234234278"),
+                String::from("818181911112111")
+            ]
+        ),
+        3121910778619
+    );
+}
