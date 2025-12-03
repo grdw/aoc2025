@@ -19,11 +19,12 @@ fn main() -> Result<(), io::Error> {
 
 fn part1(battery_banks: &BatteryBanks) -> u16 {
     let mut total = 0;
-    let range = ['9', '8', '7', '6', '5', '4', '3', '2', '1'];
+
     for bank in battery_banks {
         let mut i = 0;
         let mut j = 1;
         let mut max = 0;
+
         let l = bank.len();
 
         while i < l {
