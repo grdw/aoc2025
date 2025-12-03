@@ -1,5 +1,6 @@
 use std::fs;
 use std::io;
+use std::cmp;
 
 type ProductIds = Vec<(u64, u64)>;
 
@@ -17,7 +18,7 @@ fn main() -> Result<(), io::Error> {
         .collect::<ProductIds>();
 
     println!("p1: {}", part1(&product_ids));
-    //println!("p2: {}", part2(&product_ids));
+    println!("p2: {}", part2(&product_ids));
 
     Ok(())
 }
@@ -41,43 +42,35 @@ fn part1(product_ids: &ProductIds) -> u64 {
     total
 }
 
-//fn part2(product_ids: &ProductIds) -> u64 {
-//    let mut counter = 0;
-//    let mut start = 50;
-//
-//    for (dir, rotations) in product_ids {
-//        for _ in 0..*rotations {
-//            match dir {
-//                'L' => start -= 1,
-//                'R' => start += 1,
-//                _   => panic!("invalid orientation")
-//            };
-//
-//            start %= 100;
-//
-//            if start == 0 {
-//                counter += 1;
-//            }
-//        }
-//    }
-//
-//    return counter
-//}
-//
-//#[test]
-//fn test_parts() {
-//    let test_rotations = vec![
-//        ('L', 68),
-//        ('L', 30),
-//        ('R', 48),
-//        ('L', 5),
-//        ('R', 60),
-//        ('L', 55),
-//        ('L', 1),
-//        ('L', 99),
-//        ('R', 14),
-//        ('L', 82),
-//    ];
-//    assert_eq!(part1(&test_rotations), 3);
-//    assert_eq!(part2(&test_rotations), 6);
-//}
+fn part2(product_ids: &ProductIds) -> u64 {
+    let mut total = 0;
+
+    for (start, end) in product_ids {
+        for x in *start..=*end {
+            let s = x.to_string();
+            let i = s.len();
+
+            for group_size in 1..=(i / 2) {
+                let mut groups = vec![];
+                let mut j = 0;
+
+                while j < i {
+                    let u = j;
+                    let v = cmp::min(j+group_size, i);
+
+                    groups.push(&s[u..v]);
+                    j += group_size
+                }
+
+                if groups.iter().all(|&x| x == groups[0]) {
+                    total += x;
+                    break;
+                }
+            }
+
+        }
+    }
+
+    total
+}
+
