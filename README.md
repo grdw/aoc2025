@@ -24,7 +24,7 @@ cargo build --release; time ./target/release pX
 | Day | Time (s) | Machine | Rating     |
 | --- | -------- | ------- | ---------- |
 | 1   | 0.254s   | 1       | 6/10       |
-| 2   |    |        | |
+| 2   | 0.711s   | 1       | 7/10       |
 | 3   |    |        | |
 | 4   |    |        | |
 | 5   |    |        | |
