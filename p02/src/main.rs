@@ -24,22 +24,21 @@ fn main() -> Result<(), io::Error> {
 }
 
 fn part1(product_ids: &ProductIds) -> u64 {
-    let mut total = 0;
+    product_ids
+        .iter()
+        .map(|(start, end)| {
+            (*start..=*end)
+                .filter(|x| {
+                    let digit_length = ((*x as f64).log10().floor() + 1.0) as u32;
+                    let tens = 10_u64.pow(digit_length / 2);
+                    let m = x % tens;
+                    let d = x / tens;
 
-    for (start, end) in product_ids {
-        for x in *start..=*end {
-            let digit_length = ((x as f64).log10().floor() + 1.0) as u32;
-            let tens = 10_u64.pow(digit_length / 2);
-            let m = x % tens;
-            let d = x / tens;
-
-            if m == d {
-                total += x;
-            }
-        }
-    }
-
-    total
+                    m == d
+                })
+                .sum::<u64>()
+        })
+        .sum()
 }
 
 fn part2(product_ids: &ProductIds) -> u64 {
