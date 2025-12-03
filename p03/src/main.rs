@@ -60,10 +60,11 @@ fn part2(battery_banks: &BatteryBanks) -> u64 {
     let size = battery_banks[0].len();
 
     for bank in battery_banks {
-        let mut joltage = vec![];
-        for _ in 0..powered_batteries {
+        //let mut joltage = vec![];
+        let mut idx = 0;
+        for _ in idx..powered_batteries-idx {
         }
-        counter += joltage;
+        counter += 0;
     }
     return counter
 }
