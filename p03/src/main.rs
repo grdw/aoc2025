@@ -1,5 +1,6 @@
 use std::fs;
 use std::io;
+use std::cmp;
 
 type BatteryBanks = Vec<Vec<u8>>;
 
@@ -57,14 +58,35 @@ fn part1(battery_banks: &BatteryBanks) -> u16 {
 fn part2(battery_banks: &BatteryBanks) -> u64 {
     let mut counter = 0;
     let powered_batteries: usize = 12;
-    let size = battery_banks[0].len();
 
     for bank in battery_banks {
-        //let mut joltage = vec![];
+        let mut joltage: u64 = 0;
         let mut idx = 0;
-        for _ in idx..powered_batteries-idx {
+        let mut picks = 0;
+
+        loop {
+            let midx = cmp::min(idx+powered_batteries, bank.len()-idx);
+            let mut max = 0;
+            for j in idx..midx {
+                if bank[j] > max {
+                    max = bank[j];
+                    idx = j;
+                }
+            }
+
+            joltage = joltage*10 + (bank[idx] as u64);
+            idx += 1;
+            picks += 1;
+
+            if picks == powered_batteries {
+                break;
+            }
+
+            if idx == bank.len() {
+                break;
+            }
         }
-        counter += 0;
+        counter += joltage;
     }
     return counter
 }
