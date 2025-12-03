@@ -66,7 +66,6 @@ fn part2(product_ids: &ProductIds) -> u64 {
                     break;
                 }
             }
-
         }
     }
 
