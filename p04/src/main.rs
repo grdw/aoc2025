@@ -81,13 +81,14 @@ fn remove_rolls(paper_rolls: &mut PaperRolls) -> u64 {
                 continue
             }
 
-            let c = count_rolls(paper_rolls, x as isize, y as isize);
-
-            if c < MAX_SIZE {
-                paper_rolls[y][x] = '.';
-                total += 1;
+            if count_rolls(paper_rolls, x as isize, y as isize) >= MAX_SIZE {
+                continue
             }
+
+            paper_rolls[y][x] = '.';
+            total += 1;
         }
     }
+
     return total
 }
