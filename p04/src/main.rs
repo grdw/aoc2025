@@ -1,7 +1,7 @@
 use std::fs;
 use std::io;
 
-const MAX_SIZE: u16 = 4;
+const MAX_SIZE: u8 = 4;
 const GRID: [(isize, isize); 8] = [
     (-1,-1),(-1,0),(-1,1),
     (0,-1),        (0,1),
