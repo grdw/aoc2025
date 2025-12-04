@@ -1,6 +1,13 @@
 use std::fs;
 use std::io;
 
+const MAX_SIZE: u16 = 4;
+const GRID: [(isize, isize); 8] = [
+    (-1,-1),(-1,0),(-1,1),
+    (0,-1),        (0,1),
+    (1,-1), (1,0), (1,1),
+];
+
 type PaperRolls = Vec<Vec<char>>;
 
 fn main() -> Result<(), io::Error> {
@@ -16,13 +23,6 @@ fn main() -> Result<(), io::Error> {
 
     Ok(())
 }
-
-const MAX_SIZE: u16 = 4;
-const GRID: [(isize, isize);8] = [
-    (-1,-1),(-1,0),(-1,1),
-    (0,-1),        (0,1),
-    (1,-1), (1,0), (1,1),
-];
 
 fn part1(paper_rolls: &PaperRolls) -> usize {
     let row_len = paper_rolls[0].len();
