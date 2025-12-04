@@ -27,9 +27,13 @@ fn main() -> Result<(), io::Error> {
 fn part1(paper_rolls: &PaperRolls) -> usize {
     let row_len = paper_rolls[0].len();
 
-    (0..paper_rolls.len()).map(|y| {
-        (0..row_len).filter(|&x| grabbable(paper_rolls, x, y)).count()
-    }).sum()
+    (0..paper_rolls.len())
+        .map(|y| {
+            (0..row_len)
+                .filter(|&x| grabbable(paper_rolls, x, y))
+                .count()
+        })
+        .sum()
 }
 
 fn grabbable(paper_rolls: &PaperRolls, x: usize, y: usize) -> bool {
