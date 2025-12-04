@@ -53,6 +53,9 @@ fn count_surrounding_rolls(paper_rolls: &PaperRolls, x: isize, y: isize) -> u16 
     let mut count = 0;
 
     for (gy, gx) in &GRID {
+        // Note: this is pure evil math hackery. If you end up with an isize
+        // of -1 f.e. and casting that ot a usize, it will return the usize::MAX
+        // which can't be found on the grid.
         let dy = (gy + y) as usize;
         let dx = (gx + x) as usize;
 
