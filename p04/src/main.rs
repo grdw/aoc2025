@@ -40,7 +40,7 @@ fn count_rolls(paper_rolls: &PaperRolls, x: isize, y: isize) -> u16 {
 
     for (gy, gx) in &GRID {
         // Note: this is pure evil math hackery. If you end up with an isize
-        // of -1 f.e. and casting that ot a usize, it will return the usize::MAX
+        // of -1 f.e. and casting that to a usize, it will return the usize::MAX
         // which can't be found on the grid.
         let dy = (gy + y) as usize;
         let dx = (gx + x) as usize;
@@ -55,7 +55,7 @@ fn count_rolls(paper_rolls: &PaperRolls, x: isize, y: isize) -> u16 {
     return count
 }
 
-fn part2(paper_rolls: &PaperRolls) -> u64 {
+fn part2(paper_rolls: &PaperRolls) -> u16 {
     let mut total = 0;
     let mut altered_rolls = paper_rolls.clone();
 
@@ -72,7 +72,7 @@ fn part2(paper_rolls: &PaperRolls) -> u64 {
     return total
 }
 
-fn remove_rolls(paper_rolls: &mut PaperRolls) -> u64 {
+fn remove_rolls(paper_rolls: &mut PaperRolls) -> u16 {
     let mut total = 0;
     let row_len = paper_rolls[0].len();
 
