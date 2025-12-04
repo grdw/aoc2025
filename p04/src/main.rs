@@ -8,11 +8,7 @@ fn main() -> Result<(), io::Error> {
     let paper_rolls = input
         .trim()
         .split("\n")
-        .map(|b|
-            b
-            .chars()
-            .collect()
-        )
+        .map(|row| row.chars().collect())
         .collect::<PaperRolls>();
 
     println!("p1: {}", part1(&paper_rolls));
@@ -21,35 +17,25 @@ fn main() -> Result<(), io::Error> {
     Ok(())
 }
 
+const MAX_SIZE: u16 = 4;
 const GRID: [(isize, isize);8] = [
     (-1,-1),(-1,0),(-1,1),
     (0,-1),        (0,1),
     (1,-1), (1,0), (1,1),
 ];
 
-fn part1(paper_rolls: &PaperRolls) -> u16 {
-    let mut total = 0;
+fn part1(paper_rolls: &PaperRolls) -> usize {
+    let row_len = paper_rolls[0].len();
 
-    for y in 0..paper_rolls.len() {
-        let row = &paper_rolls[y];
-
-        for x in 0..row.len() {
-            if row[x] == '@' {
-                let c = count_surrounding_rolls(
-                    paper_rolls,
-                    x as isize,
-                    y as isize
-                );
-                if c < 4 {
-                    total += 1;
-                }
-            }
-        }
-    }
-    return total
+    (0..paper_rolls.len()).map(|y| {
+        (0..row_len).filter(|&x|
+            paper_rolls[y][x] == '@' &&
+            count_rolls(paper_rolls, x as isize, y as isize) < MAX_SIZE
+        ).count()
+    }).sum()
 }
 
-fn count_surrounding_rolls(paper_rolls: &PaperRolls, x: isize, y: isize) -> u16 {
+fn count_rolls(paper_rolls: &PaperRolls, x: isize, y: isize) -> u16 {
     let mut count = 0;
 
     for (gy, gx) in &GRID {
@@ -91,16 +77,15 @@ fn remove_rolls(paper_rolls: &mut PaperRolls) -> u64 {
 
     for y in 0..paper_rolls.len() {
         for x in 0..row_len {
-            if paper_rolls[y][x] == '@' {
-                let c = count_surrounding_rolls(
-                    paper_rolls,
-                    x as isize,
-                    y as isize
-                );
-                if c < 4 {
-                    paper_rolls[y][x] = '.';
-                    total += 1;
-                }
+            if paper_rolls[y][x] == '.' {
+                continue
+            }
+
+            let c = count_rolls(paper_rolls, x as isize, y as isize);
+
+            if c < MAX_SIZE {
+                paper_rolls[y][x] = '.';
+                total += 1;
             }
         }
     }
