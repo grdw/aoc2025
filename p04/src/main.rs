@@ -68,6 +68,7 @@ fn part2(paper_rolls: &PaperRolls) -> u64 {
 
         total += removed;
     }
+
     return total
 }
 
