@@ -29,13 +29,16 @@ fn part1(paper_rolls: &PaperRolls) -> usize {
 
     (0..paper_rolls.len()).map(|y| {
         (0..row_len).filter(|&x|
-            paper_rolls[y][x] == '@' &&
-            count_rolls(paper_rolls, x as isize, y as isize) < MAX_SIZE
+            grabbable(paper_rolls, x as isize, y as isize)
         ).count()
     }).sum()
 }
 
-fn count_rolls(paper_rolls: &PaperRolls, x: isize, y: isize) -> u16 {
+fn grabbable(paper_rolls: &PaperRolls, x: isize, y: isize) -> bool {
+    if paper_rolls[y as usize][x as usize] == '.' {
+        return false
+    }
+
     let mut count = 0;
 
     for (gy, gx) in &GRID {
@@ -52,7 +55,7 @@ fn count_rolls(paper_rolls: &PaperRolls, x: isize, y: isize) -> u16 {
         }
     }
 
-    return count
+    return count < MAX_SIZE
 }
 
 fn part2(paper_rolls: &PaperRolls) -> u16 {
@@ -78,11 +81,7 @@ fn remove_rolls(paper_rolls: &mut PaperRolls) -> u16 {
 
     for y in 0..paper_rolls.len() {
         for x in 0..row_len {
-            if paper_rolls[y][x] == '.' {
-                continue
-            }
-
-            if count_rolls(paper_rolls, x as isize, y as isize) >= MAX_SIZE {
+            if !grabbable(paper_rolls, x as isize, y as isize) {
                 continue
             }
 
