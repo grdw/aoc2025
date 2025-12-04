@@ -28,25 +28,25 @@ fn part1(paper_rolls: &PaperRolls) -> usize {
     let row_len = paper_rolls[0].len();
 
     (0..paper_rolls.len()).map(|y| {
-        (0..row_len).filter(|&x|
-            grabbable(paper_rolls, x as isize, y as isize)
-        ).count()
+        (0..row_len).filter(|&x| grabbable(paper_rolls, x, y)).count()
     }).sum()
 }
 
-fn grabbable(paper_rolls: &PaperRolls, x: isize, y: isize) -> bool {
-    if paper_rolls[y as usize][x as usize] == '.' {
+fn grabbable(paper_rolls: &PaperRolls, x: usize, y: usize) -> bool {
+    if paper_rolls[y][x] == '.' {
         return false
     }
 
     let mut count = 0;
+    let iy = y as isize;
+    let ix = x as isize;
 
     for (gy, gx) in &GRID {
         // Note: this is pure evil math hackery. If you end up with an isize
         // of -1 f.e. and casting that to a usize, it will return the usize::MAX
         // which can't be found on the grid.
-        let dy = (gy + y) as usize;
-        let dx = (gx + x) as usize;
+        let dy = (gy + iy) as usize;
+        let dx = (gx + ix) as usize;
 
         if let Some(row) = paper_rolls.get(dy) && let Some(roll) = row.get(dx) {
             if *roll == '@' {
@@ -81,7 +81,7 @@ fn remove_rolls(paper_rolls: &mut PaperRolls) -> u16 {
 
     for y in 0..paper_rolls.len() {
         for x in 0..row_len {
-            if !grabbable(paper_rolls, x as isize, y as isize) {
+            if !grabbable(paper_rolls, x, y) {
                 continue
             }
 
