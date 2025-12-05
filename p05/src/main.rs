@@ -52,11 +52,11 @@ fn part2(ranges: &IngredientRanges) -> u64 {
         let mut dstart = *start;
 
         for (xstart, xend) in ranges {
-            // Because I only check if the current entry
-            // overlaps with any of the ends of previous
-            // entries I can stop since the ranges are
-            // sorted before-hand.
             if xstart == start && xend == end {
+                // Because I only check if the current entry
+                // overlaps with any of the ends of previous
+                // entries I can stop since the ranges are
+                // sorted before-hand.
                 break
             } else if start >= xstart && end <= xend {
                 // If we're fully enveloped with any of the
