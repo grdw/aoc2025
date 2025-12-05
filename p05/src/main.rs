@@ -58,9 +58,7 @@ fn part2(ranges: &IngredientRanges) -> u64 {
             // sorted before-hand.
             if xstart == start && xend == end {
                 break
-            }
-
-            if start >= xstart && end <= xend {
+            } else if start >= xstart && end <= xend {
                 // If we're fully enveloped with any of the
                 // other ranges it means we can just skip
                 // counting and go on to the next range.
