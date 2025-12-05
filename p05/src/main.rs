@@ -42,8 +42,6 @@ fn part1(ranges: &IngredientRanges, ingredients: &Ingredients) -> usize {
                 .any(|(start, end)| id >= start && id <= end)
         )
         .count()
-
-    //return count
 }
 
 fn part2(ranges: &IngredientRanges) -> u64 {
@@ -54,14 +52,22 @@ fn part2(ranges: &IngredientRanges) -> u64 {
         let mut dstart = *start;
 
         for (xstart, xend) in ranges {
+            // Because I only check if the current entry
+            // overlaps with any of the ends of previous
+            // entries I can stop since the ranges are
+            // sorted before-hand.
             if xstart == start && xend == end {
                 break
             }
 
-            // fully enveloped means we can just skip counting
             if start >= xstart && end <= xend {
+                // If we're fully enveloped with any of the
+                // other ranges it means we can just skip
+                // counting and go on to the next range.
                 continue 'parent;
             } else if start >= xstart && start <= xend {
+                // Set the starting point to the closest
+                // end + 1
                 dstart = xend + 1;
             }
         }
