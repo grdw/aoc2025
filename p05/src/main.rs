@@ -34,16 +34,6 @@ fn main() -> Result<(), io::Error> {
 }
 
 fn part1(ranges: &IngredientRanges, ingredients: &Ingredients) -> usize {
-    //let mut count = 0;
-    //for id in ingredients {
-    //    for (start, end) in ranges {
-    //        if id >= start && id <= end {
-    //            count += 1;
-    //            break;
-    //        }
-    //    }
-    //}
-
     ingredients
         .iter()
         .filter(|&id|
