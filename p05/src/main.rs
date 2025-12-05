@@ -60,7 +60,6 @@ fn part2(ranges: &IngredientRanges) -> u64 {
 
             // fully enveloped means we can just skip counting
             if start >= xstart && end <= xend {
-                //println!("{}-{} FULLY WRAPPED", start, end);
                 continue 'parent;
             } else if start >= xstart && start <= xend {
                 dstart = xend + 1;
