@@ -18,6 +18,7 @@ cargo build --release; time ./target/release pX
 | # | CPU                            |
 | - | ------------------------------ |
 | 1 | Apple M4                       |
+| 2 | Intel(R) Core(TM) Ultra 9 185H |
 
 **For both part 1 and part 2:**
 
