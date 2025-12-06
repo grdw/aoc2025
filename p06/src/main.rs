@@ -4,8 +4,8 @@ use std::io;
 #[derive(Debug)]
 enum CephalopodPart {
     Number(u64),
-    Addition,
-    Multiplication
+    Add,
+    Mul
 }
 
 type CephalopodProblems = Vec<Vec<CephalopodPart>>;
@@ -20,8 +20,8 @@ fn main() -> Result<(), io::Error> {
         .for_each(|row|
             for (i, n) in row.split_whitespace().enumerate() {
                 let part = match n {
-                    "*" => CephalopodPart::Multiplication,
-                    "+" => CephalopodPart::Addition,
+                    "*" => CephalopodPart::Mul,
+                    "+" => CephalopodPart::Add,
                     _   => CephalopodPart::Number(
                         n.parse::<u64>().unwrap()
                     )
@@ -35,7 +35,7 @@ fn main() -> Result<(), io::Error> {
         );
 
     println!("p1: {}", part1(&cephalopod_problems));
-    //println!("p2: {}", part2(&cephalod_problems));
+    println!("p2: {}", part2(&input));
 
     Ok(())
 }
@@ -47,16 +47,16 @@ fn part1(cephalopod_problems: &CephalopodProblems) -> u64 {
         let op = &problem[problem.len() - 1];
 
         let mut solution = match op {
-            CephalopodPart::Multiplication => 1,
-            CephalopodPart::Addition => 0,
+            CephalopodPart::Mul => 1,
+            CephalopodPart::Add => 0,
             _ => panic!("Invalid operation")
         };
 
         for n in &problem[0..problem.len() - 1] {
             if let CephalopodPart::Number(x) = n {
                 match op {
-                    CephalopodPart::Multiplication => solution *= x,
-                    CephalopodPart::Addition => solution += x,
+                    CephalopodPart::Mul => solution *= x,
+                    CephalopodPart::Add => solution += x,
                     _ => panic!("Invalid operation")
                 };
             }
@@ -68,45 +68,64 @@ fn part1(cephalopod_problems: &CephalopodProblems) -> u64 {
     return total
 }
 
-//fn part2(cephalod_problems: &BatteryBanks) -> u64 {
-//    let mut counter = 0;
-//    let powered_batteries: usize = 12;
-//
-//    for bank in cephalod_problems {
-//        let mut joltage: u64 = 0;
-//        let mut remove = bank.len() - powered_batteries;
-//        let mut stack = vec![];
-//
-//        for d in bank {
-//            while remove > 0 && !stack.is_empty() && stack.last().unwrap() < &d {
-//                stack.pop();
-//                remove -= 1;
-//            }
-//            stack.push(d);
-//        }
-//
-//        stack.truncate(powered_batteries);
-//
-//        for d in stack {
-//            joltage = 10 * joltage + (*d as u64);
-//        }
-//
-//        counter += joltage;
-//    }
-//    return counter
-//}
-//
-//#[test]
-//fn test_part2() {
-//    assert_eq!(
-//        part2(
-//            &vec![
-//                vec![9,8,7,6,5,4,3,2,1,1,1,1,1,1,1],
-//                vec![8,1,1,1,1,1,1,1,1,1,1,1,1,1,9],
-//                vec![2,3,4,2,3,4,2,3,4,2,3,4,2,7,8],
-//                vec![8,1,8,1,8,1,9,1,1,1,1,2,1,1,1]
-//            ]
-//        ),
-//        3121910778619
-//    );
-//}
+fn part2(input: &String) -> u64 {
+    let mut rows: Vec<&str> = input
+        .split("\n")
+        .collect();
+
+    let _ = rows.pop();
+
+    let mut counter = 0;
+    let mut problems: Vec<Vec<&str>> = vec![];
+    let mut spaces: Vec<usize> = vec![];
+    let mut space_count = 0;
+
+    // Parsing
+    for (i, c) in rows.last().unwrap().chars().enumerate() {
+        match c {
+            '*' | '+' => spaces.push(i),
+            ' '       => continue,
+            _         => panic!("Invalid character {}", c)
+        }
+    }
+
+    spaces.push(rows[0].len());
+
+    for (j, row) in rows.iter().enumerate() {
+        for i in 0..spaces.len()-1 {
+            let blurb = &row[spaces[i]..spaces[i + 1]];
+
+            match problems.get_mut(i) {
+                Some(vec) => vec.push(blurb),
+                None      => problems.push(vec![blurb])
+            }
+        }
+    }
+
+    for p in problems {
+        let mut numbers: Vec<u64> = vec![0; p.len()];
+
+        for y in 0..p.len()-1 {
+            for x in 0..p[y].len() {
+                let d = p[y].chars().nth(x).unwrap();
+
+                if let Some(e) = d.to_digit(10) {
+                    numbers[x] = numbers[x] * 10 + e as u64;
+                }
+            }
+        };
+
+        let op = p.last().unwrap().trim();
+        numbers.retain(|&x| x > 0);
+
+        let answer = match op {
+            "+" => numbers.iter().sum::<u64>(),
+            "*" => numbers.iter().product::<u64>(),
+            _   => panic!("Invalid operand")
+        };
+
+        counter += answer;
+    }
+
+    return counter
+}
