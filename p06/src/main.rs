@@ -49,7 +49,7 @@ fn part1(input: &String) -> u64 {
 }
 
 fn part2(input: &String) -> u64 {
-    let mut rows: Vec<&str> = input
+    let rows: Vec<&str> = input
         .split_terminator("\n")
         .collect();
 
