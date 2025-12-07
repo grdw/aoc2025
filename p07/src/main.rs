@@ -26,19 +26,18 @@ fn parse(file: &'static str) -> Result<Grid, io::Error> {
 
 fn part1(grid: &Grid) -> usize {
     let mut count = 0;
-    let mut grid_with_splits = grid.clone();
-    let mut y = 0;
     let mut drawy = VecDeque::new();
     let mut set = HashSet::new();
-    let mut sx = grid[0].iter().position(|&x| x == 'S').unwrap();
+
+    let sx = grid[0]
+        .iter()
+        .position(|&x| x == 'S')
+        .unwrap();
+
     drawy.push_front((1, sx));
 
     while let Some((y, x)) = drawy.pop_front() {
-        if set.contains(&(y, x)) {
-            continue
-        }
-
-        if y + 1 >= grid.len() {
+        if set.contains(&(y, x)) || y + 1 >= grid.len() {
             continue
         }
 
