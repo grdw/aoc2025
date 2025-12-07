@@ -78,12 +78,14 @@ fn part2(grid: &Grid) -> usize {
         .position(|&x| x == 'S')
         .unwrap();
 
-	queue.push_front((1, sx));
+	queue.push_front(vec![(1, sx)]);
 
-    while let Some((y, x)) = queue.pop_front() {
-        if set.contains(&(y, x)) {
+    while let Some(route) = queue.pop_front() {
+        if set.contains(&route) {
             continue
         }
+
+        let (y, x) = route.last().unwrap();
 
         if y + 1 >= grid.len() {
             //set.insert(route);
@@ -92,18 +94,26 @@ fn part2(grid: &Grid) -> usize {
             continue
         }
 
-        match grid[y + 1][x] {
+        match grid[y + 1][*x] {
             '^' => {
-                queue.push_back((y + 1, x - 1));
-                queue.push_back((y + 1, x + 1));
+                let mut new_route = route.clone();
+                new_route.push((y + 1, x - 1));
+                queue.push_back(new_route);
+
+                let mut new_route = route.clone();
+                new_route.push((y + 1, x + 1));
+                queue.push_back(new_route);
             },
             '.' => {
-                queue.push_back((y + 1, x));
+                let mut new_route = route.clone();
+                new_route.push((y + 1, *x));
+                queue.push_back(new_route);
             },
             _ => panic!("Invalid character")
         }
 
-        set.insert((y, x));
+        set.insert(route.clone());
+        //set.insert(new_route);
     }
 
     //println!("{:?}", set.len());
