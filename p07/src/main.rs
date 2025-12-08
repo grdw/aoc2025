@@ -69,56 +69,44 @@ fn test_part1() {
 }
 
 fn part2(grid: &Grid) -> usize {
-    let mut count = 0;
     let mut queue = VecDeque::new();
     let mut set = HashSet::new();
+    let mut count_grid = vec![
+        vec![0; grid[0].len()];
+        grid.len()
+    ];
 
     let sx = grid[0]
         .iter()
         .position(|&x| x == 'S')
         .unwrap();
 
-	queue.push_front(vec![(1, sx)]);
+	queue.push_front((1, sx));
+    count_grid[1][sx] = 1;
 
-    while let Some(route) = queue.pop_front() {
-        if set.contains(&route) {
+    while let Some((y, x)) = queue.pop_front() {
+        if set.contains(&(y, x)) || y + 1 >= grid.len() {
             continue
         }
 
-        let (y, x) = route.last().unwrap();
-
-        if y + 1 >= grid.len() {
-            //set.insert(route);
-            count += 1;
-            println!("BOTTOM!");
-            continue
-        }
-
-        match grid[y + 1][*x] {
+        match grid[y + 1][x] {
             '^' => {
-                let mut new_route = route.clone();
-                new_route.push((y + 1, x - 1));
-                queue.push_back(new_route);
-
-                let mut new_route = route.clone();
-                new_route.push((y + 1, x + 1));
-                queue.push_back(new_route);
+                count_grid[y + 1][x - 1] += count_grid[y][x];
+                count_grid[y + 1][x + 1] += count_grid[y][x];
+                queue.push_back((y + 1, x - 1));
+                queue.push_back((y + 1, x + 1));
             },
             '.' => {
-                let mut new_route = route.clone();
-                new_route.push((y + 1, *x));
-                queue.push_back(new_route);
+                count_grid[y + 1][x] += count_grid[y][x];
+                queue.push_back((y + 1, x));
             },
             _ => panic!("Invalid character")
         }
 
-        set.insert(route.clone());
-        //set.insert(new_route);
+        set.insert((y, x));
     }
 
-    //println!("{:?}", set.len());
-
-    return count
+    return count_grid[count_grid.len() - 1].iter().sum()
 }
 
 #[test]
