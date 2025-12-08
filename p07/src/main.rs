@@ -6,9 +6,10 @@ type Grid = Vec<Vec<char>>;
 
 fn main() -> Result<(), io::Error> {
     let grid = parse("input")?;
+    let (p1, p2) = resolve(&grid);
 
-    println!("part1: {}", part1(&grid));
-    println!("part2: {}", part2(&grid));
+    println!("part1: {}", p1);
+    println!("part2: {}", p2);
 
     Ok(())
 }
@@ -25,50 +26,8 @@ fn parse(file: &'static str) -> Result<Grid, io::Error> {
     )
 }
 
-fn part1(grid: &Grid) -> usize {
+fn resolve(grid: &Grid) -> (usize, usize) {
     let mut count = 0;
-    let mut queue = VecDeque::new();
-    let mut set = HashSet::new();
-
-    let sx = grid[0]
-        .iter()
-        .position(|&x| x == 'S')
-        .unwrap();
-
-    queue.push_front((1, sx));
-
-    while let Some((y, x)) = queue.pop_front() {
-        if set.contains(&(y, x)) || y + 1 >= grid.len() {
-            continue
-        }
-
-        match grid[y + 1][x] {
-            '^' => {
-                count += 1;
-                queue.push_back((y + 1, x - 1));
-                queue.push_back((y + 1, x + 1));
-            },
-            '.' => {
-                queue.push_back((y + 1, x));
-            },
-            _ => panic!("Invalid character")
-        }
-
-        set.insert((y, x));
-    }
-
-    return count
-}
-
-#[test]
-fn test_part1() {
-    let grid = parse("example_input").unwrap();
-
-    assert_eq!(part1(&grid), 21);
-
-}
-
-fn part2(grid: &Grid) -> usize {
     let mut queue = VecDeque::new();
     let mut set = HashSet::new();
     let mut count_grid = vec![
@@ -91,13 +50,16 @@ fn part2(grid: &Grid) -> usize {
 
         match grid[y + 1][x] {
             '^' => {
+                count += 1;
                 count_grid[y + 1][x - 1] += count_grid[y][x];
                 count_grid[y + 1][x + 1] += count_grid[y][x];
+
                 queue.push_back((y + 1, x - 1));
                 queue.push_back((y + 1, x + 1));
             },
             '.' => {
                 count_grid[y + 1][x] += count_grid[y][x];
+
                 queue.push_back((y + 1, x));
             },
             _ => panic!("Invalid character")
@@ -106,13 +68,13 @@ fn part2(grid: &Grid) -> usize {
         set.insert((y, x));
     }
 
-    return count_grid[count_grid.len() - 1].iter().sum()
+    return (count, count_grid[count_grid.len() - 1].iter().sum())
 }
 
 #[test]
-fn test_part2() {
+fn test_resolve() {
     let grid = parse("example_input").unwrap();
 
-    assert_eq!(part2(&grid), 40);
+    assert_eq!(resolve(&grid), (21, 40));
 
 }
