@@ -1,6 +1,5 @@
 use std::fs;
 use std::io;
-use std::collections::{HashSet, VecDeque};
 
 type RedTiles = Vec<(isize, isize)>;
 
